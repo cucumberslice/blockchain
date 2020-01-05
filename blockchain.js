@@ -1,4 +1,4 @@
-let sha256 = require('./js-sha256')
+let sha256 = require('js-sha256')
 
 /**
  * genesisBlock: bascically contains some kind of configurational stuff. for example in bitcoin, the genesisBlock is the first block at index 0 and that wil contain different kind of rewards for the miners
@@ -25,3 +25,5 @@ class Blockchain {
     return hash
   }
 }
+
+module.exports = Blockchain
