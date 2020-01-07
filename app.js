@@ -2,20 +2,43 @@ const express = require('express')
 const app  = express()
 const bodyParser = require('body-parser')
 
-app.use(bodyParser.json())
+let Block = require('./block')
+let Blockchain = require('./blockchain')
+let Transaction = require('./transaction')
+let BlockchainNode = require('./BlockchainNode')
+
+let transactions = []
+let nodes = []
+let genesisBlock = new Block()
 
 let port = 3000
 // access the arguments
 process.argv.forEach(function(val, index, array) {
   port = array[2]
 })
-let Block = require('./block')
-let Blockchain = require('./blockchain')
-let Transaction = require('./transaction')
 
-let transactions = []
 
-let genesisBlock = new Block()
+if(port == undefined) {
+  port = 3000
+}
+app.use(bodyParser.json())
+
+app.post('/nodes/register', function(req,res) {
+  let nodesLists = req.body.urls
+  nodesLists.forEach(nodeDictionary => {
+    let node = new BlockchainNode(nodeDictionary["url"])
+    nodes.push(node)
+  })
+  res.json(nodes)
+})
+
+app.get('/nodes', function(req,res) {
+  res.json(nodes)
+})
+
+
+
+
 // let blockchain = new Blockchain(genesisBlock)
 
 app.get('/', function(req,res) {
@@ -59,6 +82,8 @@ app.get('/blockchain', function(req,res) {
   res.json(blockchain)
   */
 })
+
+
 
 app.listen(port, function() {
   console.log('server has started')

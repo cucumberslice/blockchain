@@ -1,5 +1,5 @@
  class BlockchainNode {
-   constructor() {
+   constructor(url) {
      this.url = url
    }
  }
