@@ -39,7 +39,7 @@ app.get('/nodes', function(req,res) {
 
 
 
-// let blockchain = new Blockchain(genesisBlock)
+let blockchain = new Blockchain(genesisBlock)
 
 app.get('/', function(req,res) {
   res.send('hello world')
@@ -48,6 +48,7 @@ app.get('/', function(req,res) {
 app.get('/mine', function(req,res) {
   let block = blockchain.getNextBlock(transactions)
   blockchain.addBlock(block)
+  transactions = []
   res.json(block)
 })
 
