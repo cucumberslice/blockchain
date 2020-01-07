@@ -10,8 +10,17 @@ let Transaction = require('./transaction')
 
 let transactions = []
 
+let genesisBlock = new Block()
+let blockchain = new Blockchain(genesisBlock)
+
 app.get('/', function(req,res) {
   res.send('hello world')
+})
+
+app.get('/mine', function(req,res) {
+  let block = blockchain.getNextBlock(transactions)
+  blockchain.addBlock(block)
+  res.json(block)
 })
 
 app.post('/transactions', function(req,res) {
@@ -29,8 +38,8 @@ app.post('/transactions', function(req,res) {
 
 app.get('/blockchain', function(req,res) {
 
-
-  let transaction = new Transaction('Mary', 'jerry', 100)
+  res.json(blockchain)
+ /** let transaction = new Transaction('Mary', 'jerry', 100)
 
   let genesisBlock = new Block()
   let blockchain = new Blockchain(genesisBlock)
@@ -43,6 +52,7 @@ app.get('/blockchain', function(req,res) {
   blockchain.addBlock(block1)
 
   res.json(blockchain)
+  */
 })
 
 app.listen(3000, function() {
