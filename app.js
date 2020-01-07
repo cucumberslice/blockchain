@@ -1,6 +1,7 @@
 const express = require('express')
 const app  = express()
 const bodyParser = require('body-parser')
+const fetch = require('node-fetch')
 
 let Block = require('./block')
 let Blockchain = require('./blockchain')
@@ -22,6 +23,30 @@ if(port == undefined) {
   port = 3000
 }
 app.use(bodyParser.json())
+
+app.get('/resolve', function(req,res) {
+  try{
+    nodes.forEach( node => {
+      fetch(node.url + '/blockchain')
+      .then(function(response) {
+        return response.json()
+      })
+      .then(function(othernodeBlockchain) {
+        if(blockchain.blocks.length < othernodeBlockchain.blocks.length) {
+          blockchain = othernodeBlockchain
+        }
+
+        res.send(blockchain)
+      })
+      // let res = await fetch(node.url + '/blockchain');
+      // return res.json()
+    })
+  }
+  catch (error) {
+    console.log(error)
+  }
+
+})
 
 app.post('/nodes/register', function(req,res) {
   let nodesLists = req.body.urls
